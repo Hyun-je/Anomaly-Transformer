@@ -55,13 +55,13 @@ class Encoder(nn.Module):
 
 
 class AnomalyTransformer(nn.Module):
-    def __init__(self, win_size, enc_in, c_out, d_model=512, n_heads=8, e_layers=3, d_ff=512,
+    def __init__(self, win_size, downsample, enc_in, c_out, d_model=512, n_heads=8, e_layers=3, d_ff=512,
                  dropout=0.0, activation='gelu', output_attention=True):
         super(AnomalyTransformer, self).__init__()
         self.output_attention = output_attention
 
         # Downsample
-        self.downsample = torch.nn.Upsample(size=(win_size//4, enc_in), mode='nearest')
+        self.downsample = torch.nn.Upsample(scale_factor=downsample, mode='nearest')
 
         # Encoding
         self.embedding = DataEmbedding(enc_in, d_model, dropout)
@@ -71,7 +71,7 @@ class AnomalyTransformer(nn.Module):
             [
                 EncoderLayer(
                     AttentionLayer(
-                        AnomalyAttention(win_size//4, False, attention_dropout=dropout, output_attention=output_attention),
+                        AnomalyAttention(int(win_size*downsample), False, attention_dropout=dropout, output_attention=output_attention),
                         d_model, n_heads),
                     d_model,
                     d_ff,
@@ -85,7 +85,7 @@ class AnomalyTransformer(nn.Module):
         self.projection = nn.Linear(d_model, c_out, bias=True)
 
         # Upsample
-        self.upsample = torch.nn.Upsample(size=(win_size, c_out), mode='bilinear')
+        self.upsample = torch.nn.Upsample(scale_factor=1/downsample, mode='bilinear')
 
     def forward(self, x):
 
