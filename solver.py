@@ -34,7 +34,6 @@ class EarlyStopping:
         if self.best_score is None:
             self.best_score = score
             self.best_score2 = score2
-            self.save_checkpoint(epoch, val_loss, val_loss2, model, path)
         elif score < self.best_score + self.delta or score2 < self.best_score2 + self.delta:
             self.counter += 1
             print(f'EarlyStopping counter: {self.counter} out of {self.patience}')
@@ -43,8 +42,9 @@ class EarlyStopping:
         else:
             self.best_score = score
             self.best_score2 = score2
-            self.save_checkpoint(epoch, val_loss, val_loss2, model, path)
             self.counter = 0
+
+        self.save_checkpoint(epoch, val_loss, val_loss2, model, path)
 
     def save_checkpoint(self, epoch, val_loss, val_loss2, model, path):
         if self.verbose:
