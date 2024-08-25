@@ -201,12 +201,16 @@ class SMDSegLoader(object):
 
 def get_loader_segment(data_path, batch_size, win_size=100, step=1, mode='train', dataset='PSM'):
     if (dataset == 'SMD'):
+        print('init SMDSegLoader')
         dataset = SMDSegLoader(data_path, win_size, step, mode)
     elif (dataset == 'MSL'):
+        print('init MSLSegLoader')
         dataset = MSLSegLoader(data_path, win_size, step, mode)
     elif (dataset == 'SMAP'):
+        print('init SMAPSegLoader')
         dataset = SMAPSegLoader(data_path, win_size, step, mode)
     elif (dataset == 'PSM'):
+        print('init PSMSegLoader')
         dataset = PSMSegLoader(data_path, win_size, step, mode)
 
     shuffle = False
