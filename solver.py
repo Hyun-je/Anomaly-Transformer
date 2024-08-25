@@ -70,16 +70,20 @@ class Solver(object):
 
         self.__dict__.update(Solver.DEFAULTS, **config)
 
-        self.train_loader = get_loader_segment(self.data_path, batch_size=self.batch_size, win_size=self.win_size,
+        self.train_loader = get_loader_segment(self.data_path, batch_size=self.batch_size,
+                                               win_size=self.win_size, step=self.step,
                                                mode='train',
                                                dataset=self.dataset)
-        self.vali_loader = get_loader_segment(self.data_path, batch_size=self.batch_size, win_size=self.win_size,
+        self.vali_loader = get_loader_segment(self.data_path, batch_size=self.batch_size,
+                                              win_size=self.win_size, step=self.step,
                                               mode='val',
                                               dataset=self.dataset)
-        self.test_loader = get_loader_segment(self.data_path, batch_size=self.batch_size, win_size=self.win_size,
+        self.test_loader = get_loader_segment(self.data_path, batch_size=self.batch_size,
+                                              win_size=self.win_size, step=self.step,
                                               mode='test',
                                               dataset=self.dataset)
-        self.thre_loader = get_loader_segment(self.data_path, batch_size=self.batch_size, win_size=self.win_size,
+        self.thre_loader = get_loader_segment(self.data_path, batch_size=self.batch_size,
+                                              win_size=self.win_size, step=self.step,
                                               mode='thre',
                                               dataset=self.dataset)
 

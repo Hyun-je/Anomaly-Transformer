@@ -203,11 +203,11 @@ def get_loader_segment(data_path, batch_size, win_size=100, step=100, mode='trai
     if (dataset == 'SMD'):
         dataset = SMDSegLoader(data_path, win_size, step, mode)
     elif (dataset == 'MSL'):
-        dataset = MSLSegLoader(data_path, win_size, 1, mode)
+        dataset = MSLSegLoader(data_path, win_size, step, mode)
     elif (dataset == 'SMAP'):
-        dataset = SMAPSegLoader(data_path, win_size, 1, mode)
+        dataset = SMAPSegLoader(data_path, win_size, step, mode)
     elif (dataset == 'PSM'):
-        dataset = PSMSegLoader(data_path, win_size, 1, mode)
+        dataset = PSMSegLoader(data_path, win_size, step, mode)
 
     shuffle = False
     if mode == 'train':
