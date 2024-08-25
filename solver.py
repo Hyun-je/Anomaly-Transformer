@@ -364,6 +364,7 @@ class Solver(object):
         print("pred_df: ", pred_df.shape)
         submission_df = pd.read_csv('sample_submission.csv')
         submission_df['anomaly'] = pred_df
+        submission_df['test_energy'] = pd.DataFrame(np.repeat(test_energy, self.downsample, axis=0))
         submission_df.to_csv(f'{self.model_save_path}/pred.csv', index=False)
 
         from sklearn.metrics import precision_recall_fscore_support
