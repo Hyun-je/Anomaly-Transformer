@@ -366,7 +366,7 @@ class Solver(object):
         pred_df = pd.DataFrame(pred)
         submission_df = pd.read_csv('sample_submission.csv')
         submission_df['anomaly'] = pred_df
-        submission_df.to_csv(f'pred.csv', index=False)
+        submission_df.to_csv(f'{self.model_save_path}/pred.csv', index=False)
 
         from sklearn.metrics import precision_recall_fscore_support
         from sklearn.metrics import accuracy_score
