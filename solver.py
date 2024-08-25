@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
+import pandas as pd
 import os
 import time
 from utils.utils import *
@@ -361,6 +362,11 @@ class Solver(object):
         gt = np.array(gt)
         print("pred: ", pred.shape)
         print("gt:   ", gt.shape)
+
+        pred_df = pd.DataFrame(pred)
+        submission_df = pd.read_csv('sample_submission.csv')
+        submission_df['anomaly'] = pred_df
+        submission_df.to_csv(f'pred.csv', index=False)
 
         from sklearn.metrics import precision_recall_fscore_support
         from sklearn.metrics import accuracy_score
