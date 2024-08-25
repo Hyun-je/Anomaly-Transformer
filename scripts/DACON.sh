@@ -11,5 +11,3 @@ python main.py \
 	--mode test --dataset PSM --data_path data/DACON \
 	--input_c 51 --output_c 51 --step 4 --pretrained_model 20 \
 	--win_size 128
-
-
