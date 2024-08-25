@@ -38,8 +38,8 @@ class PSMSegLoader(object):
 
         self.test_labels = pd.read_csv(data_path + '/test_label.csv').values[:, 1:]
 
-        print("test:", self.test.shape)
-        print("train:", self.train.shape)
+        print("test:", self.test.shape[0] // self.step, self.test.shape[1])
+        print("train:", self.train.shape[0] // self.step, self.train.shape[1])
 
     def __len__(self):
         """
