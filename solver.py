@@ -15,15 +15,6 @@ def my_kl_loss(p, q):
     return torch.mean(torch.sum(res, dim=-1), dim=1)
 
 
-def adjust_learning_rate(optimizer, epoch, lr_):
-    lr_adjust = {epoch: lr_ * (0.5 ** ((epoch - 1) // 1))}
-    if epoch in lr_adjust.keys():
-        lr = lr_adjust[epoch]
-        for param_group in optimizer.param_groups:
-            param_group['lr'] = lr
-        print('Updating learning rate to {}'.format(lr))
-
-
 class EarlyStopping:
     def __init__(self, patience=7, verbose=False, dataset_name='', delta=0):
         self.patience = patience
@@ -94,6 +85,7 @@ class Solver(object):
     def build_model(self):
         self.model = AnomalyTransformer(win_size=self.win_size, enc_in=self.input_c, c_out=self.output_c, e_layers=3)
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr)
+        self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=10, gamma=0.5)
 
         if torch.cuda.is_available():
             self.model.cuda()
@@ -131,6 +123,7 @@ class Solver(object):
             loss_2.append((rec_loss + self.k * prior_loss).item())
 
         return np.average(loss_1), np.average(loss_2)
+
 
     def train(self):
 
@@ -200,14 +193,14 @@ class Solver(object):
 
             vali_loss1, vali_loss2 = self.vali(self.test_loader)
 
-            print(
-                "Epoch: {0}, Steps: {1} | Train Loss: {2:.7f} Vali Loss: {3:.7f} ".format(
-                    epoch + 1, train_steps, train_loss, vali_loss1))
+            print(f"Epoch: {epoch+1}, Steps: {train_steps} | Train Loss: {train_loss:.7f} Vali Loss1: {vali_loss1:.7f} Vali Loss2: {vali_loss2:.7f} ")
             early_stopping(epoch, vali_loss1, vali_loss2, self.model, path)
             if early_stopping.early_stop:
                 print("Early stopping")
                 break
-            adjust_learning_rate(self.optimizer, epoch + 1, self.lr)
+            self.scheduler.step()
+            print(f'LR: {self.scheduler.get_last_lr()}')
+
 
     def test(self):
         self.model.load_state_dict(
