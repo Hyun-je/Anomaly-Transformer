@@ -360,7 +360,8 @@ class Solver(object):
         print("pred: ", pred.shape)
         print("gt:   ", gt.shape)
 
-        pred_df = pd.DataFrame(pred)
+        pred_df = pd.DataFrame(np.repeat(pred, self.downsample, axis=0))
+        print("pred_df: ", pred_df.shape)
         submission_df = pd.read_csv('sample_submission.csv')
         submission_df['anomaly'] = pred_df
         submission_df.to_csv(f'{self.model_save_path}/pred.csv', index=False)
