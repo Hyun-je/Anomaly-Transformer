@@ -58,7 +58,7 @@ class EarlyStopping:
     def save_checkpoint(self, epoch, val_loss, val_loss2, model, path):
         if self.verbose:
             print(f'Validation loss decreased ({self.val_loss_min:.6f} --> {val_loss:.6f}).  Saving model ...')
-        torch.save(model.state_dict(), os.path.join(path, str(self.dataset) + '_checkpoint_{epoch}.pth'))
+        torch.save(model.state_dict(), os.path.join(path, str(self.dataset) + f'_checkpoint_{epoch}.pth'))
         self.val_loss_min = val_loss
         self.val_loss2_min = val_loss2
 
@@ -140,7 +140,7 @@ class Solver(object):
         path = self.model_save_path
         if not os.path.exists(path):
             os.makedirs(path)
-        early_stopping = EarlyStopping(patience=7, verbose=True, dataset_name=self.dataset)
+        early_stopping = EarlyStopping(patience=100000, verbose=True, dataset_name=self.dataset)
         train_steps = len(self.train_loader)
 
         for epoch in range(self.num_epochs):
